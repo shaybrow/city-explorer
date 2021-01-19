@@ -22,17 +22,32 @@ app.get('/location', (request, response) => {
   // normalizing data
   const jsonInfo = require('./data/location.json');
   const info = jsonInfo[0];
-  console.log(info);
 
   searchedLoc = request.query.city;
-  // 
+  // this works and I love it
 
   const newPlace = new Place(info);
 
   response.send(newPlace);
 
 });
-
+app.get('/weather', (request, response) => {
+  const get = [
+    {
+      'forecast': 'Partly cloudy until afternoon.',
+      'time': 'Mon Jan 01 2001'
+    },
+    {
+      'forecast': 'Mostly cloudy in the morning.',
+      'time': 'Tue Jan 02 2001'
+    },
+  ];
+  const theWeather = [];
+  get.forEach((object) => {
+    theWeather.push(new Weather(object));
+  });
+  response.send(theWeather);
+});
 
 
 
@@ -45,6 +60,11 @@ function Place(objectFromJson) {
   this.latitude = objectFromJson.lat;
 
 }
+function Weather(objectFromJson) {
+  this.forecast = objectFromJson.forecast;
+  this.time = objectFromJson.time;
+}
+
 // function Food(objectFromJson) {
 
 //   this.restaurant = objectFromJson.restaurant.name;
