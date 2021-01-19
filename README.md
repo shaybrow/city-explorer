@@ -18,6 +18,8 @@ Allows you to type in different cities and see info related to that city
 
 01-18-2021 -3:33 PM Application now has a fully-functional express server, with a GET route for the location resource.
 
+4:27 PM Invalid inputs now return 500 status and error msg
+
 ## Credits and Collaborations
 
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
