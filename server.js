@@ -4,6 +4,8 @@ const express = require('express');
 
 const cors = require('cors');
 
+const superagent = require('superagent');
+
 require('dotenv').config();
 
 const app = express();
@@ -15,22 +17,40 @@ const PORT = process.env.PORT || 3333;
 let searchedLoc;
 
 app.get('/location', (request, response) => {
+
+
+
   if (request.query.city === '') {
     response.status(500).send('We do not have info for Nothing, Nowhere');
     return;
   }
-  // normalizing data
-  const jsonInfo = require('./data/location.json');
-  const info = jsonInfo[0];
-
+  const key = process.env.LOCATION_API_KEY;
   searchedLoc = request.query.city;
-  // this works and I love it
+  const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${searchedLoc}&format=json`;
 
-  const newPlace = new Place(info);
+  superagent.get(url)
+    .then(retrieved => {
+      console.log(retrieved.body[0]);
+      // normalizing data
+      const newPlace = new Place(retrieved.body[0]);
+      // response.send(retrieved.body[0]);
+      response.send(newPlace);
+    })
 
-  response.send(newPlace);
+    .catch(error => {
+      response.status(500).send('ooof');
+    });
+  // const jsonInfo = require('./data/location.json');
+  // const info = jsonInfo[0];
+
+
+
+
 
 });
+
+
+
 app.get('/weather', (request, response) => {
   const get = [
     {
@@ -43,7 +63,7 @@ app.get('/weather', (request, response) => {
     },
   ];
   const theWeather = [];
-  get.forEach((object) => {
+  get.map((object) => {
     theWeather.push(new Weather(object));
   });
   response.send(theWeather);
