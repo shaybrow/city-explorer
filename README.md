@@ -11,14 +11,18 @@ Allows you to type in different cities and see info related to that city
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+
+https://codefellows.github.io/code-301-guide/curriculum/city-explorer-app/front-end/
+
+Backend server using codefellows provided city explorer as front end. Utilize api call to display various helpful info about a given city
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:-->
 
 01-18-2021 -3:33 PM Application now has a fully-functional express server, with a GET route for the location resource.
 
 4:27 PM Invalid inputs now return 500 status and error msg
+
+5:00 PM weather with example and location data display fully
 
 ## Credits and Collaborations
 
