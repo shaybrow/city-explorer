@@ -60,7 +60,6 @@ app.get('/weather', (request, response) => {
 
   superagent.get(url)
     .then(retrieved => {
-      console.log(retrieved.body.data);
       const theWeather = [];
       const returnedWeather = retrieved.body.data;
 
@@ -76,7 +75,29 @@ app.get('/weather', (request, response) => {
       console.log(error.message);
     });
 });
+app.get('/parks', (request, response) => {
+  const city = request.query.formatted_query;
+  const key = process.env.PARKS_API_KEY;
+  const url = `https://developer.nps.gov/api/v1/parks?q=${city}&limit=5&api_key=${key}`;
 
+  superagent.get(url)
+    .then(retrieved => {
+      console.log(retrieved.body.data);
+      const theWeather = [];
+      const returnedWeather = retrieved.body.data;
+
+      returnedWeather.map((object) => {
+
+        theWeather.push(new Park(object));
+      });
+      response.send(theWeather);
+
+    })
+    .catch(error => {
+      response.status(500).send('parks failed');
+      console.log(error.message);
+    });
+});
 
 
 // ======= Functions ======
@@ -91,6 +112,13 @@ function Place(objectFromJson, searchq) {
 function Weather(objectFromJson) {
   this.forecast = objectFromJson.weather.description;
   this.time = objectFromJson.datetime;
+}
+function Park(object) {
+  this.name = object.fullName;
+  this.address = object.addresses.line1;
+  this.fee = object.entranceFees.cost;
+  this.description = object.description;
+
 }
 
 // function Food(objectFromJson) {
