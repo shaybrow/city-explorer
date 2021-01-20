@@ -14,7 +14,7 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3333;
 
-let searchedLoc;
+
 
 app.get('/location', (request, response) => {
 
@@ -25,20 +25,21 @@ app.get('/location', (request, response) => {
     return;
   }
   const key = process.env.LOCATION_API_KEY;
-  searchedLoc = request.query.city;
+  const searchedLoc = request.query.city;
   const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${searchedLoc}&format=json`;
 
   superagent.get(url)
     .then(retrieved => {
-      console.log(retrieved.body[0]);
+      // console.log(retrieved.body[0]);
       // normalizing data
-      const newPlace = new Place(retrieved.body[0]);
+      const newPlace = new Place(retrieved.body[0], searchedLoc);
       // response.send(retrieved.body[0]);
       response.send(newPlace);
     })
 
     .catch(error => {
       response.status(500).send('ooof');
+      console.log(error.message);
     });
   // const jsonInfo = require('./data/location.json');
   // const info = jsonInfo[0];
@@ -52,37 +53,72 @@ app.get('/location', (request, response) => {
 
 
 app.get('/weather', (request, response) => {
-  const get = [
-    {
-      'forecast': 'Partly cloudy until afternoon.',
-      'time': 'Mon Jan 01 2001'
-    },
-    {
-      'forecast': 'Mostly cloudy in the morning.',
-      'time': 'Tue Jan 02 2001'
-    },
-  ];
-  const theWeather = [];
-  get.map((object) => {
-    theWeather.push(new Weather(object));
-  });
-  response.send(theWeather);
-});
+  const lat = request.query.latitude;
+  const lon = request.query.longitude;
+  const key = process.env.WEATHER_API_KEY;
+  const url = `https://api.weatherbit.io/v2.0/current?&lat=${lat}&lon=${lon}&key=${key}`;
 
+  superagent.get(url)
+    .then(retrieved => {
+      const theWeather = [];
+      const returnedWeather = retrieved.body.data;
+
+      returnedWeather.map((object) => {
+
+        theWeather.push(new Weather(object));
+      });
+      response.send(theWeather);
+
+    })
+    .catch(error => {
+      response.status(500).send('weather failed');
+      console.log(error.message);
+    });
+});
+app.get('/parks', (request, response) => {
+  const city = request.query.formatted_query;
+  const key = process.env.PARKS_API_KEY;
+  const url = `https://developer.nps.gov/api/v1/parks?q=${city}&limit=5&api_key=${key}`;
+
+  superagent.get(url)
+    .then(retrieved => {
+      console.log(retrieved.body.data);
+      const theWeather = [];
+      const returnedWeather = retrieved.body.data;
+
+      returnedWeather.map((object) => {
+
+        theWeather.push(new Park(object));
+      });
+      response.send(theWeather);
+
+    })
+    .catch(error => {
+      response.status(500).send('parks failed');
+      console.log(error.message);
+    });
+});
 
 
 // ======= Functions ======
 
-function Place(objectFromJson) {
-  this.search_query = searchedLoc;
+function Place(objectFromJson, searchq) {
+  this.search_query = searchq;
   this.formatted_query = objectFromJson.display_name;
   this.longitude = objectFromJson.lon;
   this.latitude = objectFromJson.lat;
 
 }
 function Weather(objectFromJson) {
-  this.forecast = objectFromJson.forecast;
-  this.time = objectFromJson.time;
+  this.forecast = objectFromJson.weather.description;
+  this.time = objectFromJson.datetime;
+}
+function Park(object) {
+  this.name = object.fullName;
+  this.address = object.addresses.line1;
+  this.fee = object.entranceFees.cost;
+  this.description = object.description;
+
 }
 
 // function Food(objectFromJson) {
