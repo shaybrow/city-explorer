@@ -32,6 +32,78 @@ Backend server using codefellows provided city explorer as front end. Utilize ap
 
 5:50PM sql database appears to be working
 
+## Timelines
+
+Number and name of feature: Create servers and setup CDNs
+
+Estimate of time needed to complete: 2 hours
+
+Start time: 1:00 PM
+
+Finish time: 3:15 PM
+
+Actual time needed to complete: 2.25 hrs
+
+---------------
+
+Number and name of feature: Read errors
+
+Estimate of time needed to complete: 1 hours
+
+Start time: 3:30 PM
+
+Finish time: 4:30 PM
+
+Actual time needed to complete:1.2 hrs
+
+---------------
+
+Number and name of feature: Weather
+
+Estimate of time needed to complete: 1 hours
+
+Start time: 4:30 PM
+
+Finish time: 5:00 PM
+
+Actual time needed to complete: 1+ hrs
+
+---------------
+
+Number and name of feature: APIs
+
+Estimate of time needed to complete: 4 hours
+
+Start time: 2:00 PM
+
+Finish time: 5:45 PM
+
+Actual time needed to complete: ~4 hrs
+
+---------------
+
+Number and name of feature: Database Setup
+
+Estimate of time needed to complete: 1 hours
+
+Start time: 3:30 PM
+
+Finish time: 5:00 PM
+
+Actual time needed to complete: ~2 hrs
+
+---------------
+
+Number and name of feature: Database Connection
+
+Estimate of time needed to complete: 1 hours
+
+Start time: 5:00 PM
+
+Finish time: 6:02 PM
+
+Actual time needed to complete: ~1 hrs
+
 ## Credits and Collaborations
 
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+- worked with Jason Dormier and Brendan Smith consistently through this project
