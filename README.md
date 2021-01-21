@@ -24,6 +24,14 @@ Backend server using codefellows provided city explorer as front end. Utilize ap
 
 5:00 PM weather with example and location data display fully
 
+1-19-20 3:00PM parks works with api
+
+4:25PM weather with api works
+
+1-20-21 5:27PM Database query and response now works
+
+5:50PM sql database appears to be working
+
 ## Credits and Collaborations
 
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
