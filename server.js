@@ -74,7 +74,7 @@ app.get('/movies', (req, res) => {
       // console.log(result.body.results);
       const returnedMovies = result.body.results;
       returnedMovies.map((obj) => {
-        moviesArr.push(new Restuarant(obj));
+        moviesArr.push(new Movie(obj));
       });
       res.send(moviesArr);
     })
@@ -83,7 +83,33 @@ app.get('/movies', (req, res) => {
       console.log(error.message);
     });
 });
+app.get('/yelp', (req, res) => {
+  const lat = req.query.latitude;
+  const lon = req.query.longitude;
+  const key = process.env.YELP_API_KEY;
+  const page = req.query.page;
+  const offset = 3 * (page - 1);
 
+  const url = `https://api.yelp.com/v3/autocomplete?text=del&${lon}&${lon}&start=${offset}`;
+
+  superagent.get(url
+    .set('user-key', key))
+    .then(result => {
+      console.log(result);
+      const yelpArray = [];
+      const returnedYelp = result.body.data;
+
+      yelpArray.map((object) => {
+
+        returnedYelp.push(new Yelp(object));
+      });
+      res.send(yelpArray);
+    })
+    .catch(error => {
+      res.status(500).send('yelp failed');
+      console.log(error.message);
+    });
+});
 
 app.get('/weather', (request, response) => {
   const lat = request.query.latitude;
@@ -153,13 +179,21 @@ function Park(object) {
 
 }
 
-function Restuarant(obj) {
+function Movie(obj) {
   this.title = obj.original_title;
   this.overview = obj.overview;
   this.average_votes = obj.vote_count;
   this.image_url = obj.poster_path;
   this.popularity = obj.popularity;
   this.released_on = obj.release_date;
+}
+
+function Yelp(obj) {
+  this.title = obj.original_title;
+  this.overview = obj.overview;
+  this.image_url = obj.poster_path;
+  this.popularity = obj.popularity;
+
 }
 
 // function Food(objectFromJson) {
