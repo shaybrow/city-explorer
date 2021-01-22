@@ -84,20 +84,19 @@ app.get('/movies', (req, res) => {
     });
 });
 app.get('/yelp', (req, res) => {
-  const lat = req.query.latitude;
-  const lon = req.query.longitude;
+  let searchedLoc = req.query.search_query;
   const key = process.env.YELP_API_KEY;
   const page = req.query.page;
-  const offset = 3 * (page - 1);
+  const offset = 5 * (page - 1);
 
-  const url = `https://api.yelp.com/v3/autocomplete?text=del&${lon}&${lon}&start=${offset}`;
+  const url = `https://api.yelp.com/v3/search?location=${searchedLoc}&start=${offset}`;
 
-  superagent.get(url
-    .set('user-key', key))
+  superagent.get(url)
+    .set('Authorization', `Bearer ${key}`)
     .then(result => {
       console.log(result);
       const yelpArray = [];
-      const returnedYelp = result.body.data;
+      const returnedYelp = result.body.businesses;
 
       yelpArray.map((object) => {
 
@@ -189,10 +188,11 @@ function Movie(obj) {
 }
 
 function Yelp(obj) {
-  this.title = obj.original_title;
-  this.overview = obj.overview;
-  this.image_url = obj.poster_path;
-  this.popularity = obj.popularity;
+  this.url = obj.url;
+  this.image_url = obj.image_url;
+  this.name = obj.name;
+  this.rating = obj.rating;
+  this.price = obj.price;
 
 }
 

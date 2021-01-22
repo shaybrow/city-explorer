@@ -36,6 +36,10 @@ Backend server using codefellows provided city explorer as front end. Utilize ap
 
 5:50PM sql database appears to be working
 
+1-21-21 movies is working properly
+
+
+
 ## Timelines
 
 Number and name of feature: Create servers and setup CDNs
