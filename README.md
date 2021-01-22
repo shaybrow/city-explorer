@@ -8,7 +8,11 @@
 Allows you to type in different cities and see info related to that city
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+get api keys
+install node modules
+set up a port
+create .env with variables
+get a string for the database url
 
 ## Architecture
 
@@ -103,6 +107,19 @@ Start time: 5:00 PM
 Finish time: 6:02 PM
 
 Actual time needed to complete: ~1 hrs
+
+---------------
+
+Number and name of feature: Movies
+
+Estimate of time needed to complete: 1 hours
+
+Start time: 4:20 PM
+
+Finish time: 5:25 PM
+
+Actual time needed to complete: ~1 hrs
+
 
 ## Credits and Collaborations
 

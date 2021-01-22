@@ -1,17 +1,13 @@
 'use strict';
 
 const express = require('express');
-
 const cors = require('cors');
-
 const superagent = require('superagent');
-
 const pg = require('pg');
 
 require('dotenv').config();
 
 const app = express();
-
 app.use(cors());
 
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -65,14 +61,35 @@ app.get('/location', (request, response) => {
       }
     });
 });
+app.get('/movies', (req, res) => {
+  const searchedLoc = req.query.search_query;
+  const key = process.env.MOVIE_API_KEY;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&&query=${searchedLoc}&page=1&include_adult=false`;
+  console.log(url);
 
+
+  superagent.get(url)
+    .then(result => {
+      const moviesArr = [];
+      // console.log(result.body.results);
+      const returnedMovies = result.body.results;
+      returnedMovies.map((obj) => {
+        moviesArr.push(new Restuarant(obj));
+      });
+      res.send(moviesArr);
+    })
+    .catch(error => {
+      res.status(500).send('movies failed');
+      console.log(error.message);
+    });
+});
 
 
 app.get('/weather', (request, response) => {
   const lat = request.query.latitude;
   const lon = request.query.longitude;
   const key = process.env.WEATHER_API_KEY;
-  const url = `https://api.weatherbit.io/v2.0/forecast/daily?&key=${key}?days=8?&lat=${lat}&lon=${lon}`;
+  const url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${key}&days=8&lat=${lat}&lon=${lon}`;
 
   superagent.get(url)
     .then(retrieved => {
@@ -99,14 +116,13 @@ app.get('/parks', (request, response) => {
   superagent.get(url)
     .then(retrieved => {
       // console.log(retrieved.body.data);
-      const theWeather = [];
-      const returnedWeather = retrieved.body.data;
+      const returnedPark = retrieved.body.data;
 
-      returnedWeather.map((object) => {
+      const thePark = returnedPark.map((object) => {
 
-        theWeather.push(new Park(object));
+        return new Park(object);
       });
-      response.send(theWeather);
+      response.send(thePark);
 
     })
     .catch(error => {
@@ -131,10 +147,19 @@ function Weather(objectFromJson) {
 }
 function Park(object) {
   this.name = object.fullName;
-  this.address = object.addresses.line1;
-  this.fee = object.entranceFees.cost;
+  this.address = object.addresses[0].line1;
+  this.fee = object.entranceFees[0].cost;
   this.description = object.description;
 
+}
+
+function Restuarant(obj) {
+  this.title = obj.original_title;
+  this.overview = obj.overview;
+  this.average_votes = obj.vote_count;
+  this.image_url = obj.poster_path;
+  this.popularity = obj.popularity;
+  this.released_on = obj.release_date;
 }
 
 // function Food(objectFromJson) {
@@ -151,3 +176,6 @@ client.connect()
   .then(() => {
     app.listen(PORT, () => console.log(`we running on ${PORT}`));
   });
+
+// // something 
+// const page = req.query.page
